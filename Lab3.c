@@ -21,9 +21,9 @@
 #include <stdint.h>
 #include "ST7735.h"
 #include "PLL.h"
-#include "../inc/tm4c123gh6pm.h
 #include "SysTick.h"
-
+#include "Switch.h"
+#include "inc/tm4c123gh6pm.h"
 
 #define SYSTICKFREQ 0x00FFFFFF
 void DelayWait10ms(uint32_t n);
@@ -82,6 +82,9 @@ void DrawClock(){
 int main(void){uint32_t j;
   PLL_Init(); //80 Mhz
 	SysTick_Init(); //initialize systick and interrupts
+	SwitchInit();
+	
+	
 	
   ST7735_InitR(INITR_REDTAB);
   ST7735_OutString("Graphics test\n");
