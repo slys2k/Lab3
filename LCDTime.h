@@ -1,0 +1,1 @@
+void DrawTimeLine(int time);
