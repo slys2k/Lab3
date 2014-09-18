@@ -35,8 +35,10 @@
 #include <stdint.h>
 #include "ST7735.h"
 #include "PLL.h"
+#include "SysTick.h"
 #include "inc/tm4c123gh6pm.h"
 
+#define SYSTICKFREQ 0x00FFFFFF
 void DelayWait10ms(uint32_t n);
 
 // test image
@@ -465,6 +467,8 @@ const uint16_t Logo[] = {
 };
 
 
+const uint16_t ClockBMP[] = {0xde, 0xad, 0xbe, 0xef};
+
 int main0(void){
   PLL_Init();
   Output_Init();
@@ -472,8 +476,62 @@ int main0(void){
   while(1){
   }
 } 
+
+
+int interruptNumber=0;
+int currentTime=1;
+int timeKeep[3];
+int x=0;
+void UserTask(void){
+		interruptNumber++;
+		if (interruptNumber>80000000) // one second at 80Mhz
+		{
+			
+			currentTime++;
+			if(currentTime>43199)
+			{
+				currentTime=1; // just passed 11:59.59, 
+			}
+			interruptNumber=0;
+		}
+		
+	/*static int i = 0;
+  LEDS = COLORWHEEL[i&(WHEELSIZE-1)];
+  i = i + 1;*/
+}
+
+//returns hours,minutes,seconds. hours in array[0],mins in array[1], secs in array[2]
+void DecipherTime(int time, int* array){
+	array[0]=time/3600;
+	int x=(time%3600);
+	array[1]=(x)/60;
+	array[2]=(x)%60;
+	
+	
+}
+
+//Expected time[0]=hours,time[1]=minutes,time[2]=seconds
+void DisplayTime(int* time){
+	
+}
+
+//Draw a line from center of clock to sides.
+void DrawTime(){
+	
+	
+	
+}
+void DrawClock(){
+	//ST7735_DrawBitmap(40,22,ClockBMP,80,80);
+	DrawTime();
+}
+
+
+
 int main(void){uint32_t j;
-  PLL_Init();
+  PLL_Init(); //80 Mhz
+	SysTick_Init(); //initialize systick and interrupts
+	
   ST7735_InitR(INITR_REDTAB);
   ST7735_OutString("Graphics test\n");
   ST7735_OutString("cubic function\n");
@@ -485,6 +543,10 @@ int main(void){uint32_t j;
   while(1){
   }
 }
+
+
+
+
 int main2(void){
   int x, y, dx, dy;
 //  uint8_t red, green, blue;
