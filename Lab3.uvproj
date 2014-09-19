@@ -425,6 +425,26 @@
               <FileType>1</FileType>
               <FilePath>.\Lab3.c</FilePath>
             </File>
+            <File>
+              <FileName>SysTick.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\SysTick.c</FilePath>
+            </File>
+            <File>
+              <FileName>SwitchInterface.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\SwitchInterface.c</FilePath>
+            </File>
+            <File>
+              <FileName>Speaker.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Speaker.c</FilePath>
+            </File>
+            <File>
+              <FileName>LCDInterFace.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\LCDInterFace.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
