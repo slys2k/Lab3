@@ -52,32 +52,24 @@ void DelayWait10ms(uint32_t n);        //
 
 int main(void){
 // declare and initialize local variables
-   uint32_t j;
 
 // Initialize Modules
-   // Speaker_Init();
-   // Timer_Init();
-   // LCD_Init();
-   // Switch_Init();
-   
-   PLL_Init(); //80 Mhz
-   SysTick_Init(); //initialize systick and interrupts
-   Switch_Init();
-   
-   
-   
-  ST7735_InitR(INITR_REDTAB);
-  ST7735_OutString("Graphics test\n");
-  ST7735_OutString("cubic function\n");
-  ST7735_PlotClear(0,4095);  // range from 0 to 4095
-  for(j=0;j<128;j++){
-    ST7735_PlotPoints(j*j/2+900-(j*j/256)*j,32*j); // cubic,linear
-    ST7735_PlotNext(); 
-  }   // called 128 times
-  while(1){
-  }
-}
+   PLL_Init();                         // 80 Mhz
+   SysTick_Init();                     // initialize systick and interrupts
+   Speaker_Init();                     // 
+   Timer_Init();                       // 
+   LCD_Init();                         // 
+   Switch_Init();                      //
 
+// main loop
+   while(1){
+   // get current time
+   // update display
+   // 
+   
+   
+   }
+}
 
 /****** mains used for unit test ******/
 

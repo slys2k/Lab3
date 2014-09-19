@@ -15,4 +15,7 @@
 /****** private functions ******/
 
 /****** public utility functions ******/
-
+void LCD_Init(void){
+   ST7735_InitR(INITR_REDTAB);
+   return;
+}
