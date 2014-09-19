@@ -1,9 +1,11 @@
 // Lab3.c
 // Runs on LM4F120/TM4C123
-// This program implements an alarm clock 
+// This program implements an alarm clock with functionality to set time, alarm
+// time, and display mode. It also implements an external speaker for the buzzer
+// of the alarm clock.
 // patterns to the LCD.
-// Daniel Valvano
-// September 12, 2013
+// Keith Cyr and Omar Marawi
+// September 19, 2013
 
 /****** Connections for the ST7735 LCD ******/
 // Backlight (pin 10) connected to +3.3 V
@@ -17,75 +19,53 @@
 // VCC (pin 2) connected to +3.3 V
 // Gnd (pin 1) connected to ground
 
+
+/******* includes ******/
 #include <stdio.h>
 #include <stdint.h>
-#include "ST7735.h"
-#include "PLL.h"
-#include "SysTick.h"
-#include "Switch.h"
-#include "inc/tm4c123gh6pm.h"
+#include "inc/tm4c123gh6pm.h"          // Dev Board files
+#include "PLL.h"                       // Phase Lock Loop driver
+#include "SysTick.h"                     // Sets up timers and interrupts
+#include "LCDInterface.h"              // OLED driver
+#include "TimerInterface.h"            // Timer interface to activate SysTick
+#include "SwitchInterface.h"           // Alarm Clock external switch interface
+#include "SpeakerInterface.h"          // Alarm Clock external speaker interface
 
-#define SYSTICKFREQ 0x00FFFFFF
-void DelayWait10ms(uint32_t n);
+/****** defined constants ******/
+#define SYSTICKFREQ 0x00FFFFFF         // @OMAR What is this?
 
-int interruptNumber=0;
-int currentTime=1;
+/****** global variables ******/
+int interruptNumber = 0;
+int currentTime = 1;
 int timeKeep[3];
-int x=0;
+int x = 0;
 
-void UserTask(void){
-		interruptNumber++;
-		if (interruptNumber>80000000) // one second at 80Mhz
-		{
-			
-			currentTime++;
-			if(currentTime>43199)
-			{
-				currentTime=1; // just passed 11:59.59, 
-			}
-			interruptNumber=0;
-		}
-		
-	/*static int i = 0;
-  LEDS = COLORWHEEL[i&(WHEELSIZE-1)];
-  i = i + 1;*/
-}
+/****** native test function prototypes ******/
+// function declarations can be found below main().
 
-//returns hours,minutes,seconds. hours in array[0],mins in array[1], secs in array[2]
-void DecipherTime(int time, int* array){
-	array[0]=time/3600;
-	int x=(time%3600);
-	array[1]=(x)/60;
-	array[2]=(x)%60;
-	
-	
-}
+/****** native utility function prototypes ******/
+// function declarations can be found below main().
+// ideally, this should be a near-empty list given proper modularity
+void DelayWait10ms(uint32_t n);        // 
 
-//Expected time[0]=hours,time[1]=minutes,time[2]=seconds
-void DisplayTime(int* time){
-	
-}
+/****** main algorithm ******/
 
-//Draw a line from center of clock to sides.
-void DrawTime(){
-	
-	
-	
-}
-void DrawClock(){
-	//ST7735_DrawBitmap(40,22,ClockBMP,80,80);
-	DrawTime();
-}
+int main(void){
+// declare and initialize local variables
+   uint32_t j;
 
-
-
-int main(void){uint32_t j;
-  PLL_Init(); //80 Mhz
-	SysTick_Init(); //initialize systick and interrupts
-	SwitchInit();
-	
-	
-	
+// Initialize Modules
+   // Speaker_Init();
+   // Timer_Init();
+   // LCD_Init();
+   // Switch_Init();
+   
+   PLL_Init(); //80 Mhz
+   SysTick_Init(); //initialize systick and interrupts
+   Switch_Init();
+   
+   
+   
   ST7735_InitR(INITR_REDTAB);
   ST7735_OutString("Graphics test\n");
   ST7735_OutString("cubic function\n");
@@ -96,6 +76,53 @@ int main(void){uint32_t j;
   }   // called 128 times
   while(1){
   }
+}
+
+
+/****** mains used for unit test ******/
+
+void UserTask(void){
+      interruptNumber++;
+      if (interruptNumber>80000000) // one second at 80Mhz
+      {
+         
+         currentTime++;
+         if(currentTime>43199)
+         {
+            currentTime=1; // just passed 11:59.59, 
+         }
+         interruptNumber=0;
+      }
+      
+   /*static int i = 0;
+  LEDS = COLORWHEEL[i&(WHEELSIZE-1)];
+  i = i + 1;*/
+}
+
+//returns hours,minutes,seconds. hours in array[0],mins in array[1], secs in array[2]
+void DecipherTime(int time, int* array){
+   array[0]=time/3600;
+   int x=(time%3600);
+   array[1]=(x)/60;
+   array[2]=(x)%60;
+   
+   
+}
+
+//Expected time[0]=hours,time[1]=minutes,time[2]=seconds
+void DisplayTime(int* time){
+   
+}
+
+//Draw a line from center of clock to sides.
+void DrawTime(){
+   
+   
+   
+}
+void DrawClock(){
+   //ST7735_DrawBitmap(40,22,ClockBMP,80,80);
+   DrawTime();
 }
 
 #define PF2   (*((volatile uint32_t *)0x40025010))
@@ -117,11 +144,11 @@ void SSR_Init(void){
 // Outputs: None
 // Notes: ...
 void DelayWait10ms(uint32_t n){
-	uint32_t volatile time;
+   uint32_t volatile time;
   while(n){
     time = 727240*2/91;  // 10msec
     while(time){
-	  	time--;
+        time--;
     }
     n--;
   }

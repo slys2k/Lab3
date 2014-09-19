@@ -1,7 +1,24 @@
+// SwitchInterface.c
+// Runs on LM4F120/TM4C123
+// @TODO: This program...
+// Keith Cyr and Omar Marawi
+// September 19, 2013
+
+/******* includes ******/
+#include <stdio.h>
+#include <stdint.h>
+
+/****** defined constants ******/
+
+/****** global variables ******/
+
+/****** private functions ******/
+
+/****** public utility functions ******/
 
 #include "inc/tm4c123gh6pm.h"
 
-void SwitchInit(void){ //PORT E to be 4 inputs, port D to be output to speaker
+void Switch_Init(void){ //PORT E to be 4 inputs, port D to be output to speaker
 	  while((SYSCTL_PRGPIO_R&0x10) == 0){};// ready?
   GPIO_PORTE_DIR_R &= 0x00;         // PE3-0 is an input
   GPIO_PORTE_AFSEL_R &= ~0x0F;      // regular port function
